@@ -14,10 +14,26 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required."],
     },
-    name: {
+    username: {
       type: String,
       required: [true, "Name is required."],
     },
+    currentLocation: String,
+
+    imageUser: {
+      type: String,
+      default: 'https://res.cloudinary.com/dwjj0oqwe/image/upload/v1669287272/Inserir_um_subt%C3%ADtulo_drgykr.png',
+    },
+    aboutUser: {
+      type: String,
+      default: ' ',
+    },
+    nextCities: [{
+      type: Schema.Types.ObjectId, ref: "City",
+    }],
+    comments: [{
+      type: Schema.Types.ObjectId, ref: "Comment",
+    }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
