@@ -41,7 +41,7 @@ router.delete('/profile/:id', isAuthenticated, async (req, res, next) => {
         res.status(200).json({ message: `User with id:${id} was deleted!` })
 
     } catch (error) {
-        next(error)
+        next(error);
     }
 })
 

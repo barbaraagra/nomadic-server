@@ -63,16 +63,46 @@ router.get('/cities/:id', async (req, res, next) => {
     }
 });
 
-router.post('/favourite-city/:id', isAuthenticated, async (req, res, next) => {
-    const { createdCity } = req.body;
-    const userId = req.payload._id;
+
+router.get('/favourite-city/:id', isAuthenticated, async (req, res, next) => {
+    /*  try {
+         const { id } = req.params;
+         const userId = req.payload._id;
+ 
+         await User.findByIdAndUpdate(userId, { $push: { nextCities: id } })
+         await City.findByIdAndUpdate(id, { $push: { favorite: userId } })
+ 
+         res.status(201).json({ message: `yay!` });
+     } catch (error) {
+         console.log(error);
+         res.status(500).json(error);
+     } */
+
     try {
-        const createFav = await City.create({ createdCity })
-        const favorite = await User.findByIdAndUpdate(userId, { $push: { favorite: createFav } })
-        res.status(201).json(favorite);
+        const { id } = req.params;
+        const userId = req.payload._id;
+
+        const thisCity = await City.findById(id);
+
+        if (thisCity.favorite.includes(id)) {
+            await City.findByIdAndUpdate(id, { $pull: { favorite: userId } });
+            res.status(200).json({ message: `City Disfavourited` });
+        } else {
+            await City.findByIdAndUpdate(id, { $push: { favorite: userId } });
+            res.status(200).json({ message: `City Favourited` });
+        }
+
+        const thisUser = await User.findById(userId);
+
+        if (thisUser.nextCities.includes(userId)) {
+            await User.findByIdAndUpdate(userId, { $pull: { nextCities: id } });
+            res.status(200).json({ message: `User Unfavourite` });
+        } else {
+            await User.findByIdAndUpdate(userId, { $push: { nextCities: id } });
+            res.status(200).json({ message: `User Favourited` });
+        }
     } catch (error) {
         console.log(error);
-        res.status(500).json(error);
     }
 });
 

@@ -26,7 +26,7 @@ app.use("/api", cityroutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/api", authRoutes);
 
-const profileroutes = require('./routes/profire.routes');
+const profileroutes = require('./routes/profile.routes');
 app.use('/api', profileroutes)
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
