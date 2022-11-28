@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const fileUploader = require("../config/cloudinary.config");
+
 
 // ℹ️ Handles password encryption
 const bcrypt = require("bcrypt");
@@ -32,7 +34,7 @@ router.post("/signup", (req, res, next) => {
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || username === "") {
-    res.status(400).json({ message: "Provide email, password and username" });
+    res.status(400).json({ message: "Provide email, password, username and picture" });
     return;
   }
 

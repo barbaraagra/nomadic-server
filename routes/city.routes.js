@@ -65,18 +65,6 @@ router.get('/cities/:id', async (req, res, next) => {
 
 
 router.get('/favourite-city/:id', isAuthenticated, async (req, res, next) => {
-    /*  try {
-         const { id } = req.params;
-         const userId = req.payload._id;
- 
-         await User.findByIdAndUpdate(userId, { $push: { nextCities: id } })
-         await City.findByIdAndUpdate(id, { $push: { favorite: userId } })
- 
-         res.status(201).json({ message: `yay!` });
-     } catch (error) {
-         console.log(error);
-         res.status(500).json(error);
-     } */
 
     try {
         const { id } = req.params;
@@ -99,7 +87,7 @@ router.get('/favourite-city/:id', isAuthenticated, async (req, res, next) => {
             res.status(200).json({ message: `User Unfavourite` });
         } else {
             await User.findByIdAndUpdate(userId, { $push: { nextCities: id } });
-            res.status(200).json({ message: `User Favourited` });
+            res.status(200).json({ message: `Wants to go!` });
         }
     } catch (error) {
         console.log(error);
