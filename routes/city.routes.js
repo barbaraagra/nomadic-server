@@ -18,6 +18,7 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
         const fullName = nameResponse.data.full_name
         const continent = nameResponse.data.continent
         const image = imgResponse.data.photos[0].image.web
+        const imgMobile = imgResponse.data.photos[0].image.mobile
         const cityDetails = response.data
         console.log(cityDetails.categories[5])
 
@@ -29,7 +30,8 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
             englishSkills: cityDetails.categories[11].data[0].int_value,
             lifeExpectancy: cityDetails.categories[7].data[1].float_value,
             coworkingSpaces: cityDetails.categories[17].data[14].int_value,
-            cityImage: image
+            cityImage: image,
+            cityImgMobile: imgMobile
         })
 
         console.log(createdCity);
@@ -40,6 +42,25 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
     }
 });
 
+router.get('/cities', async (req, res, next) => {
+    try {
+
+        const cityDetail = await City.find()
+            .populate('comments')
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    model: "User",
+                },
+            })
+
+        res.status(201).json(cityDetail);
+    } catch (error) {
+        res.json(error);
+        next(error);
+    }
+});
 
 
 router.get('/cities/:id', async (req, res, next) => {

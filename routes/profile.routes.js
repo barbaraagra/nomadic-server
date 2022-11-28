@@ -6,7 +6,7 @@ const fileUploader = require("../config/cloudinary.config");
 
 /* Get all profile */
 
-router.get('/profile', async (req, res) => {
+router.get('/profile/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const profile = await User.findById(id)
