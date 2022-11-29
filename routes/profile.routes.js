@@ -16,14 +16,50 @@ router.get('/profile/:id', async (req, res) => {
     }
 });
 
+/* NOVO EDIT */
+
+router.get("/profile-edit/:id", async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const updatedUser = await User.findById(id);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+
+router.put("/profile-edit/:id", isAuthenticated, async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { username, location, imageUrl } = req.body;
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { username, location, imageUrl },
+            { new: true }
+        )
+
+        const { _id, email } = updatedUser;
+        const payload = { _id, email, username };
+
+        const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+            algorithm: "HS256",
+            expiresIn: "14d",
+        });
+
+        res.json({ authToken });
+    } catch (error) {
+        next(error);
+    }
+});
 
 /* Edit profile */
 
-router.put('/profile-edit/:id', async (req, res, next) => {
+/* router.put('/profile-edit/:id', async (req, res, next) => {
 
     try {
         const { id } = req.params
-        const { username, email, imageUrl } = req.body;
+        const { username, email, location, imageUrl } = req.body;
 
         let profileImageUrl;
 
@@ -33,13 +69,13 @@ router.put('/profile-edit/:id', async (req, res, next) => {
             profileImageUrl = imageUrl;
         }
 
-        const updatedUser = await User.findByIdAndUpdate(id, { username, email, imageUrl }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(id, { username, email, location, imageUrl }, { new: true });
         res.status(200).json(updatedUser);
     } catch (error) {
         console.log(error);
         next(error);
     }
-});
+}); */
 
 /* Delete specific things on profile */
 

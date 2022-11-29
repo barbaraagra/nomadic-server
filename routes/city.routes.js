@@ -22,6 +22,7 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
         const imgMobile = imgResponse.data.photos[0].image.mobile
         const cityDetails = response.data
         console.log(cityDetails.categories[5])
+        console.log(summaryResponse);
 
         const createdCity = await City.create({
             cityName: fullName,
@@ -33,7 +34,7 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
             lifeExpectancy: cityDetails.categories[7].data[1].float_value,
             coworkingSpaces: cityDetails.categories[17].data[14].int_value,
             cityImage: image,
-            cityImgMobile: imgMobile
+            cityImgMobile: imgMobile,
         })
 
         console.log(createdCity);
