@@ -15,6 +15,7 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
         const nameResponse = await axios.get(`https://api.teleport.org/api/urban_areas/slug:${name}/`)
         const imgResponse = await axios.get(`https://api.teleport.org/api/urban_areas/slug:${name}/images`)
         const response = await axios.get(`https://api.teleport.org/api/urban_areas/slug:${name}/details/`)
+        const summaryResponse = await axios.get(`https://api.teleport.org/api/urban_areas/slug:${name}/scores/`)
         const fullName = nameResponse.data.full_name
         const continent = nameResponse.data.continent
         const image = imgResponse.data.photos[0].image.web
@@ -25,6 +26,7 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
         const createdCity = await City.create({
             cityName: fullName,
             continent,
+            description: summaryResponse.summary,
             currency: cityDetails.categories[5].data[0].string_value,
             language: cityDetails.categories[11].data[2].string_value,
             englishSkills: cityDetails.categories[11].data[0].int_value,
@@ -115,13 +117,16 @@ router.get('/favourite-city/:id', isAuthenticated, async (req, res, next) => {
     }
 });
 
-router.post('/comments/create', isAuthenticated, async (req, res, next) => {
+router.post('/comments/create/:id', isAuthenticated, async (req, res, next) => {
     const user = req.payload;
     const { content } = req.body;
+    const { id } = req.params;
+
     try {
 
         const createdComment = await Comment.create({ content: content, author: user._id });
         await User.findByIdAndUpdate(user._id, { $push: { comments: createdComment._id, } }, { new: true })
+        await City.findByIdAndUpdate(id, { $push: { comments: createdComment._id, } }, { new: true })
 
         res.status(201).json(createdComment);
     } catch (error) {
