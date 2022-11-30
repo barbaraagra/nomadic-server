@@ -17,6 +17,7 @@ const citySchema = new Schema(
         lifeExpectancy: Number,
         coworkingSpaces: Number,
         cityImage: String,
+        cityImgMobile: String,
         description: String,
         comments: [{
             type: Schema.Types.ObjectId, ref: "Comment",

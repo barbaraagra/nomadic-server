@@ -18,7 +18,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Name is required."],
     },
-    currentLocation: String,
+    location: String,
 
     imageUser: {
       type: String,

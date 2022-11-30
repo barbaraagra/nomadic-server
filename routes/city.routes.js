@@ -27,7 +27,7 @@ router.post("/cityfromapi/:name", async (req, res, next) => {
         const createdCity = await City.create({
             cityName: fullName,
             continent,
-            description: summaryResponse.summary,
+            description: summaryResponse.data.summary,
             currency: cityDetails.categories[5].data[0].string_value,
             language: cityDetails.categories[11].data[2].string_value,
             englishSkills: cityDetails.categories[11].data[0].int_value,
@@ -96,17 +96,17 @@ router.get('/favourite-city/:id', isAuthenticated, async (req, res, next) => {
 
         const thisCity = await City.findById(id);
 
-        if (thisCity.favorite.includes(id)) {
+        if (thisCity.favorite.includes(userId)) {
             await City.findByIdAndUpdate(id, { $pull: { favorite: userId } });
-            res.status(200).json({ message: `City Disfavourited` });
+
         } else {
             await City.findByIdAndUpdate(id, { $push: { favorite: userId } });
-            res.status(200).json({ message: `City Favourited` });
+
         }
 
         const thisUser = await User.findById(userId);
 
-        if (thisUser.nextCities.includes(userId)) {
+        if (thisUser.nextCities.includes(id)) {
             await User.findByIdAndUpdate(userId, { $pull: { nextCities: id } });
             res.status(200).json({ message: `User Unfavourite` });
         } else {

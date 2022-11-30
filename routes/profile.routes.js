@@ -2,7 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User.model');
 const { isAuthenticated } = require('../middleware/jwt.middleware');
 const fileUploader = require("../config/cloudinary.config");
-
+const jwt = require("jsonwebtoken");
 
 /* Get all profile */
 
@@ -32,10 +32,10 @@ router.get("/profile-edit/:id", async (req, res, next) => {
 router.put("/profile-edit/:id", isAuthenticated, async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { username, location, imageUrl } = req.body;
+        const { username, location, imageUser } = req.body;
         const updatedUser = await User.findByIdAndUpdate(
             id,
-            { username, location, imageUrl },
+            { username, location, imageUser },
             { new: true }
         )
 
