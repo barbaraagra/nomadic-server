@@ -22,7 +22,7 @@ const userSchema = new Schema(
 
     imageUser: {
       type: String,
-      default: 'https://res.cloudinary.com/dwjj0oqwe/image/upload/v1669287272/Inserir_um_subt%C3%ADtulo_drgykr.png',
+      default: 'https://res.cloudinary.com/dwjj0oqwe/image/upload/v1669891522/profilepic_alqqpb.png',
     },
     aboutUser: {
       type: String,
