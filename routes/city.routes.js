@@ -138,20 +138,21 @@ router.post('/comments/create/:id', isAuthenticated, async (req, res, next) => {
 
 router.put('/comments/create/:id', async (req, res, next) => {
     const { id } = req.params;
+    const {content} = req.body
     try {
+        const createdComment = await Comment.findByIdAndUpdate(id,{ content}, { new: true });
 
-
-        res.status(201).json(commentUpdate);
+        res.status(201).json(createdComment);
     } catch (error) {
         console.log(error);
         next(error);
     }
 });
 
-router.post("/comment-delete/:id/:cityId", async (req, res, next) => {
+router.delete("/comment-delete/:id/:cityId", async (req, res, next) => {
     try {
         const { id, cityId } = req.params;
-        const commentToDelete = await Comment.findById(id)
+        const commentToDelete = await Comment.findByIdAndRemove(id)
 
 
         res.status(201).json(commentToDelete);
