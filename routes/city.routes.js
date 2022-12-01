@@ -137,12 +137,13 @@ router.post('/comments/create/:id', isAuthenticated, async (req, res, next) => {
 });
 
 router.put('/comments/create/:id', async (req, res, next) => {
-    const { id } = req.params;
-    const {content} = req.body
-    try {
-        const createdComment = await Comment.findByIdAndUpdate(id,{ content}, { new: true });
 
-        res.status(201).json(createdComment);
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+        const updateComment = await Comment.findByIdAndUpdate(id, { content }, { new: true });
+
+        res.status(201).json(updateComment);
     } catch (error) {
         console.log(error);
         next(error);
